@@ -23,4 +23,13 @@ Topics covered:-
 
     temperature decides how createive the llm model will behave(0 being least) 
 
+Section 3:-
+Topics covered:-
+    Chains
+    Agents
+    custom agents
+    Tools, Toolkit
+    Output Parser
+    
+
 

@@ -15,13 +15,22 @@ def scraoe_linkedin(linkedin_profile_url:str, mock:bool=False):
 
         return_data = requests.get(linkedin_profile_url, timeout=10).json()
     else:
-        api_endpoint = "https://api.scrapin.io/enrichment/profile"
-        params={
-            "apikey":os.environ.get("SCRAPIN_API_KEY"),
-            "linkedInUrl":linkedin_profile_url
-        }
+        # api_endpoint = "https://api.scrapin.io/enrichment/profile"
+        # params={
+        #     "apikey":os.environ.get("SCRAPIN_API_KEY"),
+        #     "linkedInUrl":linkedin_profile_url
+        # }
 
-        return_data = requests.get(api_endpoint,params=params,timeout=10).json()
+        api_endpoint = "https://nubela.co/proxycurl/api/v2/linkedin"
+        header_dic={"Authorization": f'Bearer {os.environ.get("PROXYCURL_API_KEY")}'}
+        response = requests.get(
+        api_endpoint,
+        params={"url": linkedin_profile_url},
+        headers=header_dic,
+        timeout=10,
+        )
+
+        return_data = response.json()
 
     return return_data
 
