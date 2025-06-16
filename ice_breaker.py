@@ -4,6 +4,7 @@ from langchain_openai import ChatOpenAI
 
 from app_settings import *
 from prompts.section2_prompts import *
+from third_party.linkedin import scraoe_linkedin
 
 information = """
  Elon Reeve Musk (/ˈiːlɒn/; EE-lon; born June 28, 1971) is a businessman and investor. He is the founder, chairman, CEO, and CTO of SpaceX; angel investor, CEO, product architect and former chairman of Tesla, Inc.; owner, chairman and CTO of X Corp.; founder of the Boring Company and xAI; co-founder of Neuralink and OpenAI; and president of the Musk Foundation. He is the wealthiest person in the world, with an estimated net worth of US$232 billion as of December 2023, according to the Bloomberg Billionaires Index, and $254 billion according to Forbes, primarily from his ownership stakes in Tesla and SpaceX.[5][6]
@@ -25,7 +26,7 @@ if __name__== "__main__":
     chain = summary_template_prompt | llm
 
 
-    
-    result = chain.invoke(input={"information":information})
+    linkedin_data = scraoe_linkedin("casper is a ghost", mock=True)
+    result = chain.invoke(input={"information":linkedin_data})
 
     print(result)
