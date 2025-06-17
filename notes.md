@@ -30,6 +30,11 @@ Topics covered:-
     custom agents
     Tools, Toolkit
     Output Parser
+
+    agents and agents tool shoul be separate not in smae file.
+
+
+
     
 
 

@@ -73,6 +73,6 @@ def lookup(name:str)->str:
 
     # return "https://www.linkedin.com/in/anshul131/"
 
-data = lookup("ansul mishra")
+# data = lookup("ansul mishra")
 
-print(data)
+# print(data)
