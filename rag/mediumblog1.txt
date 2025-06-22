@@ -1,0 +1,430 @@
+
+Search
+Write
+Sign up
+
+Sign in
+
+
+
+Walmart Global Tech Blog
+Walmart Global Tech Blog
+We’re powering the next great retail disruption. Learn more about us — https://www.linkedin.com/company/walmartglobaltech/
+
+Follow publication
+
+­­Exploring the World of Vector Databases: A Comprehensive Guide
+Prajwal R
+Prajwal R
+
+Follow
+10 min read
+·
+Aug 19, 2024
+14
+
+
+
+
+Introduction
+As the internet expanded, unstructured data like articles, photos, and videos became widespread, posing a challenge for traditional relational databases. Imagine trying to find similar shoes from a collection of shoe pictures using only raw pixel values, it’s impossible with relational databases.
+
+Enter Vector Databases. This unstructured data is converted into a list of numbers known as embedding vectors. Vector databases utilize these vectors to search through unstructured data such as images, video, text, and audio based on content, not just keywords.
+
+As part of this blog, we delve into understanding what vector databases are, how they work, choosing the right kind of vector database for a given scenario, and a hands-on example on how to perform a search on Milvus vector database.
+
+Explain Vector Databases Like I’m 5
+Imagine you have a bunch of fruits, and you really like the taste of apples. Instead of sorting them by colours or sizes, you decide to group them by how sweet or sour they are. Sweet fruits like apples, grapes, and ripe bananas go in one group, while sour fruits like oranges go in another. Now, if you want fruits that taste like apples, you just look in the sweet group.
+
+But what if you want something special, like a fruit that’s sweet like an apple but also tangy like an orange? That’s when you ask a fruit expert who knows a lot about different flavours. They can suggest a fruit that matches your unique taste because they have information about many fruits. This expert is like a “vector database”. It remembers lots of details about things, like flavours, in a unique way. So, if you’re looking for food with a select combination of flavours, this database can quickly find the right options for you.
+
+Understanding How Vector Databases Work
+
+How vector databases work
+The above figure illustrates at a high level how a Vector Database application works. When you submit a query into the application, a vector embedding is created which is essentially a mathematical representation that captures the essence of your query.
+
+Now, this embedding is compared with other embeddings that are stored in the vector database from a multitude of sources such as Images, Documents, or Audio. Similarity measures come into play, helping identify the most related embeddings based on content. Cosine similarity is one of the various mathematical techniques to ascertain similarity between vectors.
+
+The database generates a response composed of closely matching embeddings which is returned to the user. With every sub-sequent query, the embedding model creates new embeddings for it and the same process is followed.
+
+Applications of Vector Databases
+Some of the areas where vector databases play a pivotal role are listed below:
+
+1. Retrieval-Augmented Generation (RAG)
+RAG, is a technique used to enhance response accuracy and reliability by fetching facts from external sources. RAG helps a regular large language model (LLM) understand context by leveraging a giant database of unstructured data stored as vectors.
+
+A critical aspect that powers the capabilities of RAG models is the vector database that stores the embeddings for fast semantic search during the initial retrieval stage. This is where highly optimized vector databases like Weaviate, Milvus, FAISS, or Pinecone come into play. They allow storing billions of text or document vectors for low-latency similarity search.
+
+2. Training Data for Generative AI Models
+Large scale vector datasets curated from images, text, code and other areas are used to train Generative AI models like GPT-3. The models derive their world knowledge from analysing these vector patterns.
+
+3. Anomaly Detection
+Identify anomalous data instances by detecting vectors diverging from expected clusters, signalling potential fraud or system faults.
+
+Choosing the Right Kind of Vector Database
+When it comes to selecting a database for vector formats, two broad categories emerge:
+
+Independent Vector Databases:
+Independent or Standalone vector databases require that you maintain the embeddings independent of the original database. There could be some added benefits to this architecture. One should decide if these added benefits are worth the extra complexity and cost.
+
+Vector Search in Current Database:
+Another solution is to store the embeddings where your data already resides. This way, the complexity of the architecture is reduced, and you will not have extra compliance concerns. Last but not least, it seems to be a cost-effective solution. However, these solutions should be considered in terms of database queries per second (QPS).
+
+Exploring Different Independent Vector Databases
+Some of the most widely adapted vector databases are covered below:
+
+1. Weaviate (Weaviate.io | GitHub)
+Open-source vector database that stores both objects and vectors.
+Allows you to store and retrieve data objects based on their semantic properties by indexing them with vectors.
+Can be used stand-alone (aka bring your vectors) or with a variety of modules that can do the vectorization for you and extend the core capabilities.
+It has a GraphQL and REST API to access your data easily.
+Allows ingestion of any media type with Weaviate modules:
+Combines vector and scalar search.
+While it offers APIs for integration, the number of pre-built integrations with other tools and platforms may be limited compared to more established databases.
+It is a relatively new project, and while it has an active community, it may lack the maturity and stability of more established data storage solutions.
+2. Pinecone (Pinecone.io)
+Pinecone is a fully cloud managed highly scalable (up to billions) vector database that provides long-term memory for high-performance AI applications.
+Allows CRUD (Create, Read, Update, and Delete) operations and querying vector embeddings with the Pinecone API using Python, HTTP or Node.js
+Enterprise-level support, reliability, security and HIPAA compliant.
+Supports integration with popular machine learning frameworks, such as TensorFlow and PyTorch
+Pinecone supports integrations with multiple systems and applications, including Google Cloud Platform, OpenAI, GPT-3, GPT-3.5, GPT-4, ChatGPT Plus, Elasticsearch, Haystack, and more.
+Closed source and higher costs associated to hosting data and query volume.
+Vendor lock-in, making it difficult to migrate to another vector database system if needed.
+3. Milvus (Milvus | GitHub)
+Database specifically designed to handle queries over input vectors, it is capable of indexing vectors on a trillion scale.
+Vector index types supported by Milvus use approximate nearest neighbors search (ANNS).
+Milvus has client libraries wrapped on top of the Milvus API that can be used to insert, delete, and query data programmatically from application code — PyMilvus, Node.js SDK, Go SDK, Java SDK. Can be easily integrated with popular machine learning frameworks like TensorFlow, PyTorch, and scikit-learn
+Milvus does not provide full transactional support, which can be a crucial requirement for some applications. Organizations that require strong consistency and transactional guarantees may need to consider other database solutions.
+Relatively new project. May not have the same level of maturity as other, more established database technologies in terms of ecosystem integration, adoption and support.
+4. Qdrant (Qdrant.tech | GitHub | Demos)
+Qdrant is a vector database & vector similarity search engine. It is deployed as an API service providing search for the nearest high-dimensional vectors.
+Qdrant can store and filter elements based on a variety of data types and query conditions, including string matching, numerical ranges and supports geolocation and filtering based on geographical criteria.
+Uses a graph-like structure to find the closest objects in sublinear time. Avoiding calculation of distances to every object from the database, but some candidates only.
+Enables filtering of search results based on custom attributes, which can be useful for applications that require more specific search criteria than just vector similarity.
+A relatively new project may not have the same level of maturity as other, more established database technologies in terms of ecosystem integration, adoption and support.
+Performance: Coded in Rust, performance seems to be one of Qdrant’s main objectives. In their benchmark, they appear to be significantly faster than their competitors (PS: this information is not confirmed by this Approximate Nearest Neighbor (ANN) benchmark, which may not use the same testing conditions.
+A Tabular view describing some of the salient features across the above vector databases:
+
+
+Exploring General Purpose Vector Databases
+General-purpose databases, not initially designed for vector search, can be adapted for small vector quantities. If you already use one of these databases, sticking with it is pragmatic. Consider dedicated vector databases when cost and latency become issues.
+
+1. pgvector:
+An open-source extension for PostgreSQL that allows you to store and query vector embeddings within your database. It is built on top of the FAISS library, which is a popular library for efficient similarity search of dense vectors. Store your vectors with the rest of your data. Supports:
+
+Exact and approximate nearest neighbor search
+L2 distance, inner product, and cosine distance
+Any language with a Postgres client
+ACID compliance, point-in-time recovery, JOINs, and all the other notable features of Postgres
+2. Elasticsearch:
+Elasticsearch includes a full vector database, multiple types of retrieval (text, sparse and dense vector, hybrid), and your choice of machine learning model architectures.
+
+Allows search experience with aggregations, filtering and faceting, and auto-complete and running the search in the cloud, on-prem, or air gapped.
+
+3. Redis:
+Redis Stack as a vector database. It allows you to:
+
+Store vectors and the associated metadata within hashes or JSON documents.
+Retrieve vectors.
+Perform vector similarity searches.
+Use cases — Retrieval Augmented Generation (RAG), Semantic Caching, Recommendation Systems, Document Search
+Vector similarity search features:
+
+Vector indexing algorithms: Manages vectors in an index data structure to enable intelligent similarity search that balances search speed and search quality. Choose from two popular techniques, FLAT (a brute force approach) and Hierarchical Navigable Small Worlds (HNSW) (a faster, and approximate approach), based on your data and use cases.
+Powerful hybrid filtering: Enhance your workflows by combining the power of vector similarity with more traditional numeric, text, and tag filters. Incorporate more business logic into queries and simplify client application code.
+Vector range queries: Traditional vector search is performed by finding the “top K” most similar vectors. Redis also enables the discovery of relevant content within a predefined similarity range or threshold for an alternative and offers a more flexible search experience.
+Implementing vector search using python on a Kaggle questionnaire dataset in a Milvus vector database
+Pre-requisites:
+Before you begin, ensure you have met the following requirements:
+
+You have installed Docker and Docker Compose.
+You have installed Python3.
+Clone the repository using the below command
+git clone https://github.com/Prajwalrk97/milvus-vector-database-demo.git
+
+Follow the commands present in the README to setup the environment and docker containers
+
+Perform the necessary imports and read in the dataset. We will be sampling 100 records from the database for this example.
+import pandas as pd
+from sentence_transformers import SentenceTransformer
+
+from pymilvus import connections, utility, FieldSchema, CollectionSchema, DataType, Collection
+
+pd.options.display.max_colwidth = 100
+
+df = pd.read_csv("./data/train.csv", index_col="id")
+sampled_df = df.sample(100)[["question1","question2"]]
+concat_df = pd.concat([sampled_df["question1"],sampled_df["question2"]], axis=0)
+sentences = concat_df.to_list()
+sentences[:5]
+['Which coaching institute provides best distance learning program for 10th class?',
+ 'How much will the bank FD rate of interest decrease in India in future?',
+ 'What is the best coaching institute for GMAT in Delhi NCR region?',
+ 'Was Obama right to abstain from the UN vote on settlements?',
+ 'What are the best TV series one should really watch?']
+2. Initialise the model which will be used to generate the embeddings for the given text and embed the text present in the loaded dataframe.
+
+embedding_model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+embeddings = embedding_model.encode(sentences)
+3. Establish a connection to the Milvus server running on docker and define the schema for the collection.
+
+# Establish a connection to the Milvus server
+connections.connect(host="localhost",port=19530)
+
+# Define the schema for the collection
+fields = [
+    FieldSchema(name="pk", dtype=DataType.INT64, is_primary=True, auto_id=True),
+    FieldSchema(name="sentences", dtype=DataType.VARCHAR, is_primary=False, description="The actual sentences", max_length=1000),
+    FieldSchema(name="embeddings", dtype=DataType.FLOAT_VECTOR, is_primary=False, description="The sentence embeddings", dim=384)
+]
+
+schema = CollectionSchema(fields, "A collection to store sentence embeddings")
+4. Create the collection and insert the sentences and embeddings for those sentences into the collection and create an index (Cosine is used as an index. Other options can be Euclidian or Inner Product) for faster searches and finally, load the collection into memory.
+
+Note: Once the collection is created with a given metric type, it will support retrieval based only on that metric type
+
+# Create the collection in Milvus
+kaggle_collection = Collection("kaggle_collection", schema)
+entities = [
+    sentences,  # The actual sentences
+    embeddings,  # The sentence embeddings
+]
+
+# Insert our data into the collection
+insert_result = kaggle_collection.insert(entities)
+
+# Create an index to make future search queries faster
+index = {"index_type": "FLAT", "metric_type": "COSINE"}
+kaggle_collection.create_index("embeddings", index)
+kaggle_collection.load() # Load the data into memory
+5. Perform a vector search on the loaded collection to return the top 3 closest matches to the question — “What should i learn to be a programmer ?”. Since the metric is “Cosine”, the higher the score in the result, the closer the match is.
+
+question = "What should i learn to be a programmer ?"
+question_embedding = embedding_model.encode(question)
+
+# Perform the search
+results = kaggle_collection.search([question_embedding], "embeddings", search_params = {"metric_type": "COSINE"}, limit=3, output_fields=["sentences"],param={})
+
+# Print the search results
+for result in results:
+    for value in result:
+        print(f"{value.entity.get('sentences')} | score - {value.distance}")
+Which programming language should I learn: Java or JavaScript? | score - 0.5187628865242004
+Which programming language should I learn Java or python? | score - 0.485379159450531
+How can I learn new things? | score - 0.4258279800415039
+Conclusion
+Choosing the right vector database involves a careful evaluation of performance, ease of use, cloud options, user interface availability, GitHub popularity (number of stars, forks, and recent commits), and specificity for use cases. Whether opting for a dedicated vector database or adapting a general-purpose one, understanding the nuances is crucial for successful integration into your technical stack.
+
+References
+1. https://milvus.io/
+
+2. https://weaviate.io/
+
+3. https://www.pinecone.io/
+
+4. https://qdrant.tech/
+
+5. https://www.packtpub.com/article-hub/hands-on-vector-similarity-search-with-milvus
+
+6. https://github.com/Prajwalrk97/milvus-vector-database-demo
+
+Tags
+Retrieval Augmented Generation
+Vector Databases
+Semantic Search/Vector Search
+Approximate Nearest Neighbors Search
+Milvus
+Docker
+Milvus
+Vector Database
+Semantic Search
+Docker
+Retrieval Augmented Gen
+14
+
+
+
+Walmart Global Tech Blog
+Published in Walmart Global Tech Blog
+18.5K followers
+·
+Last published 4 days ago
+We’re powering the next great retail disruption. Learn more about us — https://www.linkedin.com/company/walmartglobaltech/
+
+
+Follow
+Prajwal R
+Written by Prajwal R
+5 followers
+·
+1 following
+Data/ML Engineer @ Walmart Global Tech
+
+
+Follow
+No responses yet
+
+Write a response
+
+What are your thoughts?
+
+Cancel
+Respond
+More from Prajwal R and Walmart Global Tech Blog
+Understanding the Jest Coverage Report: A Complete Guide
+Walmart Global Tech Blog
+In
+
+Walmart Global Tech Blog
+
+by
+
+Aakanksha
+
+Understanding the Jest Coverage Report: A Complete Guide
+Introduction
+Apr 3
+54
+1
+Enterprise Future-Proofing — Strategy for AI-Driven Architecture
+Walmart Global Tech Blog
+In
+
+Walmart Global Tech Blog
+
+by
+
+Anil Gothal
+
+Enterprise Future-Proofing — Strategy for AI-Driven Architecture
+Retail supply chains are incredibly complex ecosystems. We’ve seen how evolving customer demand, global disruptions, and legacy systems…
+May 20
+93
+2
+Reliably Processing Trillions of Kafka Messages Per Day
+Walmart Global Tech Blog
+In
+
+Walmart Global Tech Blog
+
+by
+
+Ravinder Matte
+
+Reliably Processing Trillions of Kafka Messages Per Day
+Authors: Vilas Athavale, Ravinder Matte, Sid Anand, Shrity Verma, Naresh Gopalani, Bhaven Avalani
+Jun 14, 2024
+911
+16
+Building Domain Driven Microservices
+Walmart Global Tech Blog
+In
+
+Walmart Global Tech Blog
+
+by
+
+Chandra Ramalingam
+
+Building Domain Driven Microservices
+Microservices — a definition
+Jul 1, 2020
+1K
+8
+See all from Prajwal R
+See all from Walmart Global Tech Blog
+Recommended from Medium
+How to Build Lightning-Fast Semantic Search with Vector Databases
+Vijay Gadhave
+Vijay Gadhave
+
+How to Build Lightning-Fast Semantic Search with Vector Databases
+Note: If you’re not a medium member, CLICK HERE
+
+May 28
+28
+Deploying a Lightweight Embedding Model for RAG Using Docker and FastAPI
+Philippe de Meulenaer, PhD
+Philippe de Meulenaer, PhD
+
+Deploying a Lightweight Embedding Model for RAG Using Docker and FastAPI
+An Alternative to Cloud APIs — Light, Private, Customizable
+
+May 22
+20
+Using LanceDB with S3 as your Vector Database
+The Model Observer
+In
+
+The Model Observer
+
+by
+
+Gary Sharpe
+
+Using LanceDB with S3 as your Vector Database
+Creating a simple RAG application using LanceDB, Crawl4AI, AWS S3 and LlamaIndex
+
+Feb 9
+66
+This new IDE from Google is an absolute game changer
+Coding Beauty
+In
+
+Coding Beauty
+
+by
+
+Tari Ibaba
+
+This new IDE from Google is an absolute game changer
+This new IDE from Google is seriously revolutionary.
+
+Mar 12
+5.9K
+358
+Leveraging Parquet Columnar Format for Observability Data: A Comprehensive Analysis
+Narendra reddy Sanikommu
+Narendra reddy Sanikommu
+
+Leveraging Parquet Columnar Format for Observability Data: A Comprehensive Analysis
+Observability data — logs, metrics, and traces — are generated at massive scale in modern systems. An observability platform must retain…
+Mar 2
+34
+1
+Why BM25 Algorithm Over Tf-Idf?
+MLWorks
+In
+
+MLWorks
+
+by
+
+Mayur Jain
+
+Why BM25 Algorithm Over Tf-Idf?
+The backbone of the search and information retrieval system
+
+Jan 16
+17
+See more recommendations
+Help
+
+Status
+
+About
+
+Careers
+
+Press
+
+Blog
+
+Privacy
+
+Rules
+
+Terms
+
+Text to speech
+
