@@ -11,6 +11,8 @@ from langchain.agents.output_parsers.react_single_input import ReActSingleInputO
 from typing import Union, List
 from langchain_core.agents import AgentAction, AgentFinish
 
+from langchain.agents.format_scratchpad.log import format_log_to_str
+
 # from langchain.schema import AgentAction,AgentFinish
 
 
@@ -43,18 +45,30 @@ if __name__=="__main__":
 
     # prompt = PromptTemplate(template=react_template).partial(tools=tools, tool_names = ", ".join([t.name for t in tools]))
 
-    prompt = PromptTemplate(template=react_template).partial(tools=render_text_description(tools), tool_names = ", ".join([t.name for t in tools]))
+    prompt = PromptTemplate(template=react_template).partial(
+        tools=render_text_description(tools), tool_names = ", ".join([t.name for t in tools]))
     
     llm = ChatOpenAI(temperature=0, stop="\nObservation",model="gpt-4o-mini") 
-    agent = {"input":lambda x:x ["input"]} | prompt | llm | ReActSingleInputOutputParser()
+    # agent = {"input":lambda x:x ["input"]} | prompt | llm | ReActSingleInputOutputParser()
+
+    intermediate_steps =[] #to keep track of history over agent so far
+
+    agent = (
+        {"input":lambda x:x ["input"],"agent_scratchpad":lambda x: format_log_to_str(x["agent_scratchpad"])} 
+        | prompt 
+        | llm 
+        | ReActSingleInputOutputParser()
+        )
+
 
     # input will take input dynamically, will pass it in prompt, 
     # and in end final prompt will be in llm
 
     # result = agent.invoke({"input":"what is the lenght of 'casper' in characters"})
 
-    agent_step:Union[AgentAction,AgentFinish] = agent.invoke({"input":"what is the lenght of 'casper' in characters"})
-    print("agent_step taken: ", agent_step)
+    agent_step:Union[AgentAction,AgentFinish] = agent.invoke({"input":"what is the lenght of 'casper' in characters",
+                                                               "agent_scratchpad":intermediate_steps})
+    # print("agent_step taken: ", agent_step)
 
     if isinstance(agent_step, AgentAction):
         tool_name = agent_step.tool
@@ -63,5 +77,17 @@ if __name__=="__main__":
 
         observaation = tool_to_use.func(str(tool_input))
 
-        print(observaation)
+        intermediate_steps.append((agent_step,str(observaation)))
+
+    
+
+        # print(observaation)
+    agent_step:Union[AgentAction,AgentFinish] = agent.invoke({"input":"what is the lenght of 'casper' in characters",
+                                                               "agent_scratchpad":intermediate_steps})
+    print("agent_step taken: ", agent_step)
+
+    # print("intermediate_steps ", intermediate_steps)
+
+    if isinstance(agent_step, AgentFinish):
+        print(agent_step.return_values)
 # 9500870704
